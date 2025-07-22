@@ -44,6 +44,7 @@ export const AuthProvider = ({ children }) => {
               name: data.name,
               role: data.role,
               token: idToken,
+              subscription: data.subscription || null,
             });
           }
 

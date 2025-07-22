@@ -13,10 +13,13 @@ import Input from '../components/ui/Input';
 import Textarea from '../components/ui/Textarea';
 import PDFDownloadButton from '../components/ui/PDFDownloadButton';
 import CardPreview from './CardPreview';
+import ProfessionalCardCreate from './ProfessionalCardCreate';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
 const CardCreate = () => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('basic');
   const [showPreview, setShowPreview] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -187,6 +190,9 @@ const CardCreate = () => {
     { id: 'payment', label: 'Payment', icon: CreditCard, color: 'bg-yellow-500' },
     { id: 'business', label: 'Business', icon: Building, color: 'bg-indigo-500' },
     { id: 'branding', label: 'Branding', icon: Palette, color: 'bg-pink-500' },
+    ...(user && user.subscription && user.subscription.plan ? [
+      { id: 'professional', label: 'Professional Card', icon: Briefcase, color: 'bg-teal-500' }
+    ] : [])
   ];
 
   // Auto-save functionality
@@ -1417,7 +1423,7 @@ const CardCreate = () => {
                 label="Established Year"
                 type="number"
                 placeholder="2020"
-                icon={Calendar}
+                icon={Clock}
               />
               <EditableField
                 fieldName="googleReview"
@@ -1488,6 +1494,19 @@ const CardCreate = () => {
             <FileUploadArea name="locationImage" label="Location Image" />
           </div>
         );
+
+      case 'professional':
+        if (user && user.subscription && user.subscription.plan) {
+          return <ProfessionalCardCreate />;
+        } else {
+          return (
+            <div className="flex flex-col items-center justify-center min-h-[300px] text-center">
+              <div className="text-4xl mb-4">🔒</div>
+              <h2 className="text-xl font-bold text-white mb-2">Professional Card Locked</h2>
+              <p className="text-gray-400">You need an active subscription to access the Professional Card features.</p>
+            </div>
+          );
+        }
 
       default:
         return null;
