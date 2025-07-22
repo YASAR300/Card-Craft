@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import QRCodeImage from '../assets/console1.png';
+import QRCodeImage from '../assets/Console1.png';
 import { 
   Crown, 
   Star, 
